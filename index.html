@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rating Widget</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <rating-widget>
+      <form action="https://httpbin.org/post" method="POST" id="rating-form">
+        <h1><strong>Rating Widget</strong></h1>
+        <div class="stars"></div>
+        <input type="hidden" name="question" value="How satisfied are you?" />
+        <input type="hidden" name="sentBy" value="HTML" />
+        <input type="hidden" id="rating" name="rating" value="0" required />
+      </form>
+    </rating-widget>
+    <noscript>
+      <form action="https://httpbin.org/post" method="POST">
+        <label for="fallback-rating">How satisfied are you? (1 - 5):</label>
+        <input
+          type="number"
+          id="fallback-rating"
+          name="rating"
+          min="1"
+          max="5"
+          required
+        />
+        <input type="submit" value="Submit" />
+      </form>
+    </noscript>
+    <script src="rating-widget.js"></script>
+  </body>
+</html>

@@ -1,0 +1,42 @@
+body {
+  font-family: Arial, sans-serif;
+}
+
+.rating-widget {
+  text-align: center;
+}
+
+#rating {
+  border: none;
+}
+
+input[type="radio"] {
+  display: none;
+}
+
+label {
+  color: rgb(0, 0, 0);
+  font-size: 30px;
+}
+
+input[type="radio"]:checked + label {
+  color: gold;
+}
+
+input[type="submit"] {
+  margin-top: 10px;
+  padding: 5px 15px;
+  font-size: 16px;
+}
+
+.star {
+  font-size: 30px;
+  color: grey;
+  cursor: pointer;
+}
+
+#response-message {
+  margin-top: 20px;
+  font-size: 18px;
+  font-weight: bold;
+}
