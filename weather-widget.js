@@ -1,49 +1,37 @@
-const weatherInfoDiv = document.getElementById("weather-info");
-const weatherDescriptionP = document.getElementById("weather-description");
-const temperatureP = document.getElementById("temperature");
-const weatherIconImg = document.getElementById("weather-icon");
+document.addEventListener("DOMContentLoaded", function () {
+  const weatherConditions = document.getElementById("weather-conditions");
+  const weatherTemperature = document.getElementById("weather-temperature");
+  const weatherIcon = document.getElementById("weather-icon");
 
-// Replace with the actual endpoint URL and query parameters as necessary
-const weatherApiUrl = "https://api.weather.gov/gridpoints/XXX/YY/forecast"; // XXX and YY should be replaced with actual gridpoint values
+  const latitude = "32.7157";
+  const longitude = "-117.1611";
+  const endpoint = `https://api.weather.gov/points/${latitude},${longitude}`;
 
-function displayWeather(data) {
-  if (
-    data &&
-    data.properties &&
-    data.properties.periods &&
-    data.properties.periods.length > 0
-  ) {
-    const currentWeather = data.properties.periods[0];
-    weatherDescriptionP.textContent = currentWeather.shortForecast;
-    temperatureP.textContent = `Temperature: ${currentWeather.temperature} ${currentWeather.temperatureUnit}`;
-    weatherIconImg.src = currentWeather.icon;
-    weatherIconImg.style.display = "block";
-  } else {
-    weatherDescriptionP.textContent = "Current weather conditions unavailable.";
-    temperatureP.textContent = "";
-    weatherIconImg.style.display = "none";
-  }
-}
-
-function fetchWeather() {
-  fetch(weatherApiUrl, {
+  fetch(endpoint, {
     headers: {
-      "User-Agent": "(myweatherapp.com, contact@myweatherapp.com)", // Replace with your User-Agent
+      "User-Agent": "myweatherapp.com, contact@myweatherapp.com",
+      Accept: "application/geo+json",
     },
   })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      return response.json();
-    })
+    .then((response) => response.json())
     .then((data) => {
-      displayWeather(data);
+      const forecastUrl = data.properties.forecast;
+      return fetch(forecastUrl, {
+        headers: {
+          "User-Agent": "myweatherapp.com, contact@myweatherapp.com",
+        },
+      });
+    })
+    .then((response) => response.json())
+    .then((data) => {
+      const forecast = data.properties.periods[0];
+      weatherConditions.textContent = forecast.shortForecast;
+      weatherTemperature.textContent = `${forecast.temperature} ${forecast.temperatureUnit}`;
+      weatherIcon.src = forecast.icon;
+      weatherIcon.style.display = "block";
     })
     .catch((error) => {
       console.error("Error fetching weather data:", error);
-      weatherDescriptionP.textContent = "Failed to load weather data.";
+      weatherConditions.textContent = "Current Weather Conditions Unavailable";
     });
-}
-
-document.addEventListener("DOMContentLoaded", fetchWeather);
+});
